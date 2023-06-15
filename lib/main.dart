@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services%202.dart';
+import 'package:soundpool/soundpool.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,8 +23,30 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class XylophoneApp extends StatelessWidget {
+class XylophoneApp extends StatefulWidget {
   const XylophoneApp({Key? key}) : super(key: key);
+
+  @override
+  State<XylophoneApp> createState() => _XylophoneAppState();
+}
+
+class _XylophoneAppState extends State<XylophoneApp> {
+  Soundpool pool = Soundpool.fromOptions(options: SoundpoolOptions.kDefault);
+
+  List<int> _soundIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initSoundPool();
+  }
+
+  Future<void> initSoundPool() async {
+    int soundId = await rootBundle
+        .load('assets/do1.wav')
+        .then((soundData) => pool.load(soundData));
+    _soundIds.add(soundId);
+  }
 
   @override
   Widget build(BuildContext context) {
